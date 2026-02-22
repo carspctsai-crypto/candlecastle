@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>燭堡 - 平台利潤試算小幫手</title>
+<style>
+  body { 
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+    padding: 20px; 
+    background-color: #FAF4F0; /* 溫暖的蠟燭色調背景 */
+    color: #4A4A4A; 
+  }
+  .container { 
+    max-width: 400px; 
+    margin: 0 auto; 
+    background: #FFFFFF; 
+    padding: 25px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
+  }
+  h2 { 
+    text-align: center; 
+    color: #B58A6A; 
+    margin-bottom: 20px;
+  }
+  label { 
+    display: block; 
+    margin-top: 15px; 
+    font-weight: bold; 
+    font-size: 14px;
+  }
+  input { 
+    width: 100%; 
+    padding: 10px; 
+    margin-top: 8px; 
+    box-sizing: border-box; 
+    border: 1px solid #E0E0E0; 
+    border-radius: 8px; 
+    font-size: 16px;
+  }
+  input:focus {
+    outline: none;
+    border-color: #B58A6A;
+  }
+  button { 
+    width: 100%; 
+    padding: 12px; 
+    margin-top: 25px; 
+    background-color: #B58A6A; 
+    color: white; 
+    border: none; 
+    border-radius: 8px; 
+    font-size: 16px; 
+    font-weight: bold;
+    cursor: pointer; 
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #9C7557;
+  }
+  .result { 
+    margin-top: 25px; 
+    padding: 15px; 
+    background-color: #F8F9FA; 
+    border-radius: 8px; 
+    border-left: 4px solid #B58A6A;
+  }
+  .result p { 
+    margin: 10px 0; 
+    font-size: 16px; 
+  }
+  .highlight { 
+    font-weight: bold; 
+    color: #E07A5F; 
+    font-size: 18px;
+  }
+  .note {
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+    margin-top: 15px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>燭堡 - 平台利潤試算</h2>
+  
+  <label>商品售價 (NT$)</label>
+  <input type="number" id="price" placeholder="例如：800">
+  
+  <label>材料總成本 (NT$)</label>
+  <input type="number" id="cost" placeholder="例如：300">
+  
+  <label>買家支付運費 (NT$)</label>
+  <input type="number" id="shipping" value="60">
+  
+  <button onclick="calculate()">計算實際淨利</button>
+  
+  <div class="result" id="resultBox" style="display:none;">
+    <p>🍤 蝦皮實賺：<span class="highlight" id="shopeeResult">0</span> 元</p>
+    <p>🎀 Pinkoi實賺：<span class="highlight" id="pinkoiResult">0</span> 元</p>
+  </div>
+  
+  <p class="note">※ 蝦皮以 15% + 2.5元 計算<br>※ Pinkoi以 15% + 15元 並外加 5% 營業稅計算</p>
+</div>
+
+<script>
+  function calculate() {
+    const price = parseFloat(document.getElementById('price').value) || 0;
+    const cost = parseFloat(document.getElementById('cost').value) || 0;
+    const shipping = parseFloat(document.getElementById('shipping').value) || 0;
+
+    // 蝦皮淨利 ＝ 售價 - 材料成本 - (售價 × 15%) - 2.5
+    const shopeeProfit = price - cost - (price * 0.15) - 2.5;
+    
+    // Pinkoi 淨利 ＝ 售價 - 材料成本 - {[(售價 + 運費) × 15% + 15] × 1.05}
+    const pinkoiFee = ((price + shipping) * 0.15 + 15) * 1.05;
+    const pinkoiProfit = price - cost - pinkoiFee;
+
+    document.getElementById('shopeeResult').innerText = Math.round(shopeeProfit);
+    document.getElementById('pinkoiResult').innerText = Math.round(pinkoiProfit);
+    document.getElementById('resultBox').style.display = 'block';
+  }
+</script>
+</body>
+</html>
